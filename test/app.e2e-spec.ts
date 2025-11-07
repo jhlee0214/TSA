@@ -87,6 +87,14 @@ describe('Tasks E2E', () => {
     expect(updated.status).toBe(Status.COMPLETED);
   });
 
+  it('PATCH /tasks/invalidID - 400 on invalid id number', async () => {
+
+    await request(app.getHttpServer())
+      .patch(`/tasks/invalidID`)
+      .send({ status: Status.COMPLETED, title: 'Updated Title' })
+      .expect(400);
+  });
+
   it('DELETE /tasks/:id - removes a task', async () => {
     const created = await prisma.task.create({ data: { title: 'To Delete' } });
 

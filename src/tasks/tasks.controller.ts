@@ -7,6 +7,7 @@ import {
   Get,
   Post,
   Logger,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
@@ -29,7 +30,7 @@ export class TasksController {
 
   @Patch(':id')
   async updateTask(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() updateTaskDto: UpdateTaskDto,
   ): Promise<Task> {
     Logger.log(`Updating task with id ${id}...`, 'TasksController');
@@ -37,7 +38,7 @@ export class TasksController {
   }
 
   @Delete(':id')
-  async deleteTask(@Param('id') id: number): Promise<Task> {
+  async deleteTask(@Param('id', ParseIntPipe) id: number): Promise<Task> {
     return this.tasksService.remove(id);
   }
 }
