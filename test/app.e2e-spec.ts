@@ -1,4 +1,4 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
+import { INestApplication, ValidationPipe, Logger } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 import { AppModule } from '../src/app.module';
@@ -35,7 +35,28 @@ describe('Tasks E2E', () => {
     await prisma.task.deleteMany();
   });
 
+  afterEach(async () => {
+    // Log each test completion with remaining tasks
+    const state = (expect as any).getState?.() as { currentTestName?: string };
+    const count = await prisma.task.count();
+    Logger.log(
+      `Finished: ${state?.currentTestName ?? 'unknown'} | tasks in DB: ${count}`,
+      'Tasks E2E',
+    );
+  });
+
   afterAll(async () => {
+    // Seed 10 dummy tasks after test suite finishes (for manual QA)
+    // Distribute statuses evenly: NOT_STARTED, IN_PROGRESS, COMPLETED
+    const statuses = [Status.NOT_STARTED, Status.IN_PROGRESS, Status.COMPLETED];
+    await prisma.task.createMany({
+      data: Array.from({ length: 20 }).map((_, i) => ({
+        title: `Dummy Data ${i + 1}`,
+        description: `Dummy data for manual QA ${i + 1}`,
+        status: statuses[i % statuses.length],
+      })),
+    });
+
     await app.close();
   });
 
@@ -73,11 +94,11 @@ describe('Tasks E2E', () => {
     expect(titles).toEqual(['T1', 'T2']);
   });
 
-  it('PATCH /tasks/:id - updates a task', async () => {
+  it('PUT /tasks/:id - updates a task', async () => {
     const created = await prisma.task.create({ data: { title: 'To Update' } });
 
     const res = await request(app.getHttpServer())
-      .patch(`/tasks/${created.id}`)
+      .put(`/tasks/${created.id}`)
       .send({ status: Status.COMPLETED, title: 'Updated Title' })
       .expect(200);
 
@@ -87,10 +108,9 @@ describe('Tasks E2E', () => {
     expect(updated.status).toBe(Status.COMPLETED);
   });
 
-  it('PATCH /tasks/invalidID - 400 on invalid id number', async () => {
-
+  it('PUT /tasks/invalidID - 400 on invalid id number', async () => {
     await request(app.getHttpServer())
-      .patch(`/tasks/invalidID`)
+      .put(`/tasks/invalidID`)
       .send({ status: Status.COMPLETED, title: 'Updated Title' })
       .expect(400);
   });
@@ -104,5 +124,9 @@ describe('Tasks E2E', () => {
 
     const count = await prisma.task.count();
     expect(count).toBe(0);
+  });
+
+  it('DELETE /tasks/invalidID - 400 on invalid id number', async () => {
+    await request(app.getHttpServer()).delete('/tasks/invalidID').expect(400);
   });
 });
