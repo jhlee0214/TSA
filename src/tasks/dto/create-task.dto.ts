@@ -8,6 +8,7 @@ import {
 import { Status } from '@prisma/client';
 
 export class CreateTaskDto {
+  // Title is required
   @IsString()
   @IsNotEmpty()
   title: string;
