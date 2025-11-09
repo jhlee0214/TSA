@@ -1,0 +1,303 @@
+/* Theme variables */
+:root {
+  --bg: var(--tsa-grey);
+  --text: var(--tsa-black);
+  --muted: #585858;
+  --border: #e0e2e1;
+  --thead: #ffffff;
+  --row-hover: #fff2f7;
+
+  --btn-bg: #ffffff;
+  --btn-border: #efcddd;
+  --btn-bg-hover: #ffe8f2;
+
+  --primary-text: var(--tsa-pink);
+  --primary-border: #f5a9cd;
+  --primary-bg: #ffe7f2;
+  --primary-bg-hover: #ffd9eb;
+
+  --danger-text: var(--tsa-red);
+  --danger-border: #ffc2cd;
+  --danger-bg: #fff0f2;
+  --danger-bg-hover: #ffdbe1;
+  --danger-border-hover: #f15f71;
+
+  --badge-neutral-bg: var(--tsa-grey);
+  --badge-neutral-text: var(--tsa-black);
+  --badge-warn-bg: #fff2db;
+  --badge-warn-text: var(--tsa-orange);
+  --badge-success-bg: #fff1e6;
+  --badge-success-text: var(--tsa-pink);
+
+  --focus-ring: 0 0 0 3px rgba(228, 16, 114, 0.3);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1b0f21;
+    --text: #f5f1f3;
+    --muted: #cbbac5;
+    --border: #3a223b;
+    --thead: #2a0f27;
+    --row-hover: #361331;
+
+    --btn-bg: #2d152d;
+    --btn-border: #4a1f46;
+    --btn-bg-hover: #411a3d;
+
+    --primary-text: var(--tsa-yellow);
+    --primary-border: #f6b778;
+    --primary-bg: #4a1b33;
+    --primary-bg-hover: #5a1f3f;
+
+    --danger-text: #ffb5c0;
+    --danger-border: #7e2b39;
+    --danger-bg: #3a131b;
+    --danger-bg-hover: #4a1822;
+
+    --badge-neutral-bg: #2a1a2c;
+    --badge-neutral-text: #f3dfe7;
+    --badge-warn-bg: #4b2319;
+    --badge-warn-text: var(--tsa-yellow);
+    --badge-success-bg: #3c1a28;
+    --badge-success-text: var(--tsa-orange);
+
+    --focus-ring: 0 0 0 3px rgba(238, 142, 34, 0.35);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  }
+}
+
+/* Manual override: <html data-theme="light|dark"> */
+:root[data-theme='light'] {
+  --bg: var(--tsa-grey);
+  --text: var(--tsa-black);
+  --muted: #585858;
+  --border: #e0e2e1;
+  --thead: #ffffff;
+  --row-hover: #fff2f7;
+
+  --btn-bg: #ffffff;
+  --btn-border: #efcddd;
+  --btn-bg-hover: #ffe8f2;
+
+  --primary-text: var(--tsa-pink);
+  --primary-border: #f5a9cd;
+  --primary-bg: #ffe7f2;
+  --primary-bg-hover: #ffd9eb;
+
+  --danger-text: var(--tsa-red);
+  --danger-border: #ffc2cd;
+  --danger-bg: #fff0f2;
+  --danger-bg-hover: #ffdbe1;
+
+  --badge-neutral-bg: var(--tsa-grey);
+  --badge-neutral-text: var(--tsa-black);
+  --badge-warn-bg: #fff2db;
+  --badge-warn-text: var(--tsa-orange);
+  --badge-success-bg: #fff1e6;
+  --badge-success-text: var(--tsa-pink);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+:root[data-theme='dark'] {
+  --bg: #1b0f21;
+  --text: #f5f1f3;
+  --muted: #cbbac5;
+  --border: #3a223b;
+  --thead: #2a0f27;
+  --row-hover: #361331;
+
+  --btn-bg: #2d152d;
+  --btn-border: #4a1f46;
+  --btn-bg-hover: #411a3d;
+
+  --primary-text: var(--tsa-yellow);
+  --primary-border: #f6b778;
+  --primary-bg: #4a1b33;
+  --primary-bg-hover: #5a1f3f;
+
+  --danger-text: #ffb5c0;
+  --danger-border: #7e2b39;
+  --danger-bg: #3a131b;
+  --danger-bg-hover: #4a1822;
+
+  --badge-neutral-bg: #2a1a2c;
+  --badge-neutral-text: #f3dfe7;
+  --badge-warn-bg: #4b2319;
+  --badge-warn-text: var(--tsa-yellow);
+  --badge-success-bg: #3c1a28;
+  --badge-success-text: var(--tsa-orange);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Table */
+.task-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.task-table__th {
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+  padding: 0.5rem;
+  font-weight: 600;
+  background: var(--thead);
+}
+
+.task-table__th--status {
+  position: relative;
+}
+
+.task-table__td {
+  border-bottom: 1px solid var(--border);
+  padding: 0.5rem;
+  vertical-align: top;
+  color: var(--text);
+}
+
+.task-table__row:hover {
+  background-color: var(--row-hover);
+}
+
+.task-table__td--actions {
+  white-space: nowrap;
+}
+
+.task-status-filter__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--btn-border);
+  background: var(--btn-bg);
+  color: var(--text);
+  cursor: pointer;
+}
+.task-status-filter__trigger:hover {
+  background: var(--btn-bg-hover);
+}
+.task-status-filter__chevron {
+  font-size: 0.7rem;
+}
+.task-status-filter__count {
+  font-size: 0.75rem;
+  color: var(--primary-text);
+}
+
+.task-status-filter__panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 5;
+  min-width: 180px;
+  padding: 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.task-status-filter__option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.task-status-filter__clear {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  padding: 4px 0 0;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+.task-status-filter__clear:hover {
+  color: var(--primary-text);
+}
+
+/* Buttons */
+.btn {
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border-radius: 8px;
+  background: var(--btn-bg);
+  color: var(--text);
+  border: 1px solid var(--btn-border);
+}
+.btn:hover { background: var(--btn-bg-hover); }
+.btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
+/* Edit (primary) */
+.task-edit-button,
+.btn--edit {
+  color: light-dark(#1010e4, #a3b4ff);
+  border-color: light-dark(#c3c3ff, #3a47ff);
+  background: light-dark(#e3e3ff, #10115c);
+}
+.task-edit-button:hover,
+.btn--edit:hover { background: light-dark(#c0c0fc, #231b4a); }
+
+/* Delete (danger) */
+.task-delete-button--danger,
+.btn--delete {
+  margin-left: 0.5rem;
+  color: var(--danger-text);
+  border-color: var(--danger-border);
+  background: var(--danger-bg);
+}
+.task-delete-button--danger:hover,
+.btn--delete:hover { background: light-dark(#f7a6b1, #4a1822);
+border-color: light-dark(#7e3441, #c7405b);}
+
+/* Status badges */
+.status-badge {
+  display: inline-block;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+}
+.status-badge--not-started {
+  background-color: var(--badge-neutral-bg);
+  color: var(--badge-neutral-text);
+}
+.status-badge--in-progress {
+  background-color: var(--badge-warn-bg);
+  color: var(--badge-warn-text);
+}
+.status-badge--completed {
+  background-color: var(--badge-success-bg);
+  color: var(--badge-success-text);
+}
+
+.task-empty {
+  padding: 1rem;
+  text-align: center;
+  color: var(--muted);
+}

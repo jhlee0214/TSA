@@ -1,0 +1,169 @@
+/* TaskForm styles */
+
+/* Design tokens (derived from global theme variables) */
+:root {
+  --tf-gap: 12px;
+  --tf-radius: 12px;
+  --tf-border: #f4c7da;
+  --tf-focus: var(--tsa-pink);
+  --tf-text: var(--tsa-black);
+  --tf-muted: #8b5c6a;
+  --tf-bg: #ffffff;
+  --tf-shadow: 0 12px 24px rgba(228, 16, 114, 0.08);
+  --tf-focus-ring: rgba(228, 16, 114, 0.15);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --tf-bg: #2a1025;
+    --tf-border: #5a1c3a;
+    --tf-focus: var(--tsa-yellow);
+    --tf-text: #faeef3;
+    --tf-muted: #d9bccc;
+    --tf-shadow: 0 12px 24px rgba(238, 142, 34, 0.16);
+    --tf-focus-ring: rgba(238, 142, 34, 0.25);
+  }
+}
+
+:root[data-theme='dark'] {
+  --tf-bg: #2a1025;
+  --tf-border: #5a1c3a;
+  --tf-focus: var(--tsa-yellow);
+  --tf-text: #faeef3;
+  --tf-muted: #d9bccc;
+  --tf-shadow: 0 12px 24px rgba(238, 142, 34, 0.16);
+  --tf-focus-ring: rgba(238, 142, 34, 0.25);
+}
+
+/* Layout */
+.tfForm {
+  display: grid;
+  gap: var(--tf-gap);
+}
+
+.tfRow {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  align-items: center;
+  gap: 12px;
+}
+
+.tfRowTextarea {
+  align-items: start;
+}
+
+/* Responsive */
+@media (max-width: 520px) {
+  .tfRow {
+    grid-template-columns: 1fr;
+  }
+  .tfLabel {
+    margin-bottom: 6px;
+  }
+}
+
+/* Typography */
+.tfLabel {
+  font-weight: 600;
+  color: var(--tf-text);
+}
+
+/* Inputs */
+.tfInput,
+.tfTextarea,
+.tfSelect {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: var(--tf-radius);
+  border: 1px solid var(--tf-border);
+  outline: none;
+  background: var(--tf-bg);
+  color: var(--tf-text);
+  box-sizing: border-box;
+  transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease, color .15s ease;
+}
+
+.tfTextarea {
+  min-height: 88px;
+  resize: vertical;
+}
+
+.tfInput::placeholder,
+.tfTextarea::placeholder {
+  color: var(--tf-muted);
+}
+
+/* Focus */
+.tfInput:focus,
+.tfTextarea:focus,
+.tfSelect:focus {
+  border-color: var(--tf-focus);
+  box-shadow: 0 0 0 3px var(--tf-focus-ring);
+}
+
+/* Custom select arrow */
+.tfSelect {
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="%236B7280" viewBox="0 0 16 16"><path d="M4.646 6.646a.5.5 0 0 1 .708 0L8 9.293l2.646-2.647a.5.5 0 0 1 .708.708l-3 3a.5.5 0 0 1-.708 0l-3-3a.5.5 0 0 1 0-.708z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  padding-right: 34px;
+}
+
+/* Actions */
+.tfActions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 6px;
+}
+
+/* Buttons */
+.tfBtn {
+  padding: 10px 14px;
+  border-radius: var(--tf-radius);
+  border: 1px solid transparent;
+  cursor: pointer;
+  font: inherit;
+  transition: transform .04s ease, background-color .15s ease, color .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+.tfBtn:active {
+  transform: translateY(1px);
+}
+
+.tfBtnGhost {
+  border-color: var(--tf-border);
+  background: #fff5f9;
+  color: var(--tf-text);
+}
+
+.tfBtnGhost:hover {
+  background: #ffe8f2;
+}
+
+.tfBtnPrimary {
+  border-color: var(--tf-focus);
+  background: var(--tf-focus);
+  color: #ffffff;
+  box-shadow: var(--tf-shadow);
+}
+
+.tfBtnPrimary:hover {
+  filter: brightness(0.98);
+}
+
+.tfBtnPrimary:disabled {
+  opacity: 0.7;
+  background: var(--tf-focus);
+  border-color: var(--tf-focus);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
