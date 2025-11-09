@@ -10,7 +10,6 @@
   --tf-muted: #8b5c6a;
   --tf-bg: #ffffff;
   --tf-shadow: 0 12px 24px rgba(228, 16, 114, 0.08);
-  --tf-focus-ring: rgba(228, 16, 114, 0.15);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -21,7 +20,6 @@
     --tf-text: #faeef3;
     --tf-muted: #d9bccc;
     --tf-shadow: 0 12px 24px rgba(238, 142, 34, 0.16);
-    --tf-focus-ring: rgba(238, 142, 34, 0.25);
   }
 }
 
@@ -32,7 +30,6 @@
   --tf-text: #faeef3;
   --tf-muted: #d9bccc;
   --tf-shadow: 0 12px 24px rgba(238, 142, 34, 0.16);
-  --tf-focus-ring: rgba(238, 142, 34, 0.25);
 }
 
 /* Layout */
@@ -98,7 +95,7 @@
 .tfTextarea:focus,
 .tfSelect:focus {
   border-color: var(--tf-focus);
-  box-shadow: 0 0 0 3px var(--tf-focus-ring);
+  box-shadow: 0 0 0 3px rgba(228, 16, 114, 0.15);
 }
 
 /* Custom select arrow */
