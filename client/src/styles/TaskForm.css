@@ -10,6 +10,7 @@
   --tf-muted: #8b5c6a;
   --tf-bg: #ffffff;
   --tf-shadow: 0 12px 24px rgba(228, 16, 114, 0.08);
+  --tf-focus-ring: rgba(228, 16, 114, 0.15);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -20,9 +21,11 @@
     --tf-text: #faeef3;
     --tf-muted: #d9bccc;
     --tf-shadow: 0 12px 24px rgba(238, 142, 34, 0.16);
+    --tf-focus-ring: rgba(238, 142, 34, 0.25);
   }
 }
 
+/* Dark theme */
 :root[data-theme='dark'] {
   --tf-bg: #2a1025;
   --tf-border: #5a1c3a;
@@ -30,12 +33,31 @@
   --tf-text: #faeef3;
   --tf-muted: #d9bccc;
   --tf-shadow: 0 12px 24px rgba(238, 142, 34, 0.16);
+  --tf-focus-ring: rgba(238, 142, 34, 0.25);
+}
+
+.tfModal {
+  background: var(--tf-bg);
+  padding: 1.5rem;
+  min-width: 320px;
+  max-width: 480px;
+  border-radius: 20px;
+  box-shadow: var(--tf-shadow);
+}
+
+.tfHeading {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--tf-text);
+  text-align: center;
 }
 
 /* Layout */
 .tfForm {
   display: grid;
   gap: var(--tf-gap);
+  background: var(--tf-bg);
 }
 
 .tfRow {
@@ -95,7 +117,7 @@
 .tfTextarea:focus,
 .tfSelect:focus {
   border-color: var(--tf-focus);
-  box-shadow: 0 0 0 3px rgba(228, 16, 114, 0.15);
+  box-shadow: 0 0 0 3px var(--tf-focus-ring);
 }
 
 /* Custom select arrow */
@@ -129,28 +151,31 @@
   transform: translateY(1px);
 }
 
-.tfBtnGhost {
+.tfBtnCancel {
   border-color: var(--tf-border);
-  background: #fff5f9;
+  background: light-dark(#fff5f9, #4b1e2e);
+  border-color: light-dark(#f4c7da, #a03b6c);
   color: var(--tf-text);
 }
 
-.tfBtnGhost:hover {
-  background: #ffe8f2;
+.tfBtnCancel:hover {
+  background: light-dark(#ffe8f2, #622b3f);
+  border-color: light-dark(#7e3441, #c7405b);
 }
 
-.tfBtnPrimary {
-  border-color: var(--tf-focus);
-  background: var(--tf-focus);
-  color: #ffffff;
-  box-shadow: var(--tf-shadow);
+.tfBtnEdit {
+  color: light-dark(#1010e4, #ced7fc);
+  border-color: light-dark(#c3c3ff, #3a47ff);
+  background: light-dark(#e3e3ff, #10115c);
 }
 
-.tfBtnPrimary:hover {
-  filter: brightness(0.98);
+.tfBtnEdit:hover {
+  color: light-dark(#1010e4, #dee3f9);
+  border-color: light-dark(#c3c3ff, #5d68ff);
+  background: light-dark(#e3e3ff, #242586);
 }
 
-.tfBtnPrimary:disabled {
+.tfBtnEdit:disabled {
   opacity: 0.7;
   background: var(--tf-focus);
   border-color: var(--tf-focus);

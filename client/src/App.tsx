@@ -14,6 +14,7 @@ function App() {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [completedPercent, setCompletedPercent] = useState<number | null>(null);
+  const [statusFilter, setStatusFilter] = useState<Status[]>([]);
 
   const loadTasks = async () => {
     try {
@@ -124,30 +125,22 @@ function App() {
         </div>
       </div>
       {error && <p className="error">Error: {error}</p>}
-      {!error && <TaskList tasks={tasks} onEdit={onEdit} onDelete={onDelete} />}
+      {!error && (
+        <TaskList
+          tasks={tasks}
+          selectedStatuses={statusFilter}
+          onStatusesChange={setStatusFilter}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />
+      )}
       {isModalOpen && editingTask && (
-        <div
-          onClick={handleCancelEdit}
-          style={{
-            position: 'fixed',
-            inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.4)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        >
-          <div 
-          style={{ backgroundColor: '#fff', padding: '1rem', minWidth: '400px' }}
-          onClick={(e) => e.stopPropagation()}
-          >
-            <h2>Edit Task #{editingTask.id}</h2>
-            <TaskForm
-              task={editingTask}
-              onSubmit={handleUpdateSubmit}
-              onCancel={handleCancelEdit}
-            />
-          </div>
+        <div className="modal-overlay" onClick={handleCancelEdit}>
+          <TaskForm
+            task={editingTask}
+            onSubmit={handleUpdateSubmit}
+            onCancel={handleCancelEdit}
+          />
         </div>
       )}
     </div>

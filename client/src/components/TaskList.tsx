@@ -5,6 +5,8 @@ import '../styles/TaskList.css';
 // Props definition for TaskList component
 interface TaskListProps {
   tasks: Task[];
+  selectedStatuses: Status[];
+  onStatusesChange: (statuses: Status[]) => void;
   onEdit: (task: Task, status: Status) => void;
   onDelete: (taskId: number) => void;
 }
@@ -17,9 +19,14 @@ const STATUS_OPTIONS: Array<{ value: Status; label: string }> = [
 ];
 
 // TaskList component to display and manage a list of tasks
-const TaskList: React.FC<TaskListProps> = ({ tasks, onEdit, onDelete }) => {
+const TaskList: React.FC<TaskListProps> = ({
+  tasks,
+  selectedStatuses,
+  onStatusesChange,
+  onEdit,
+  onDelete,
+}) => {
   const [filterOpen, setFilterOpen] = useState(false);
-  const [selectedStatuses, setSelectedStatuses] = useState<Status[]>([]);
   const triggerRef = useRef<HTMLButtonElement | null>(null);
   const panelRef = useRef<HTMLDivElement | null>(null);
 
@@ -43,6 +50,16 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onEdit, onDelete }) => {
     if (selectedStatuses.length === 0) return tasks;
     return tasks.filter((task) => selectedStatuses.includes(task.status ?? 'NOT_STARTED'));
   }, [tasks, selectedStatuses]);
+
+  const handleStatusToggle = (status: Status, checked: boolean) => {
+    if (checked) {
+      if (!selectedStatuses.includes(status)) {
+        onStatusesChange([...selectedStatuses, status]);
+      }
+    } else {
+      onStatusesChange(selectedStatuses.filter((value) => value !== status));
+    }
+  };
 
   // Render message if no tasks are available
   if (filteredTasks.length === 0) {
@@ -84,11 +101,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onEdit, onDelete }) => {
                       type="checkbox"
                       checked={selectedStatuses.includes(option.value)}
                       onChange={(e) => {
-                        setSelectedStatuses((prev) =>
-                          e.target.checked
-                            ? [...prev, option.value]
-                            : prev.filter((status) => status !== option.value),
-                        );
+                        handleStatusToggle(option.value, e.target.checked);
                       }}
                     />
                     {option.label}
@@ -97,7 +110,7 @@ const TaskList: React.FC<TaskListProps> = ({ tasks, onEdit, onDelete }) => {
                 <button
                   type="button"
                   className="task-status-filter__clear"
-                  onClick={() => setSelectedStatuses([])}
+                  onClick={() => onStatusesChange([])}
                 >
                   Clear
                 </button>

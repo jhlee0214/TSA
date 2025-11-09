@@ -102,6 +102,17 @@ html, body {
   color: var(--tsa-red);
 }
 
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 1000;
+}
+
 .tsa-spinner {
   min-height: 100vh;
   display: flex;

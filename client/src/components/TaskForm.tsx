@@ -53,7 +53,9 @@ export default function TaskForm({ task, onSubmit, onCancel }: Props) {
   };
 
   return (
-    <form className="tfForm" onSubmit={handleSubmit} noValidate>
+    <div className="tfModal" onClick={(e) => e.stopPropagation()}>
+      <h2 className="tfHeading">Edit Task #{task?.id}</h2>
+      <form className="tfForm" onSubmit={handleSubmit} noValidate>
       {/* Title */}
       <div className="tfRow">
         <label htmlFor="tf-title" className="tfLabel">Title:</label>
@@ -101,18 +103,19 @@ export default function TaskForm({ task, onSubmit, onCancel }: Props) {
         <button
           type="submit"
           disabled={!canSubmit}
-          className="tfBtn tfBtnPrimary"
+          className="tfBtn tfBtnEdit"
         >
           {submitting ? 'Saving…' : 'Edit'}
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="tfBtn tfBtnGhost"
+          className="tfBtn tfBtnCancel"
         >
           Cancel
         </button>
       </div>
-    </form>
+      </form>
+    </div>
   );
 }
