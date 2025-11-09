@@ -11,7 +11,7 @@ import {
   Query,
   ParseEnumPipe,
 } from '@nestjs/common';
-import { TasksService } from './tasks.service';
+import { TasksService, TaskStats } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { Task } from '@prisma/client';
 import { Status } from '@prisma/client';
@@ -47,15 +47,8 @@ export class TasksController {
     return this.tasksService.remove(id);
   }
 
-  @Get('completed-percentage')
-  async getCompletedTasksPercentage(): Promise<{ percentage: number }> {
-    const percentage = await this.tasksService.calculateCompletionPercentage();
-    return { percentage };
-  }
-
-  // Get counted each status
-  @Get('status-count')
-  async getStatusCount(): Promise<Record<Status, number>> {
-    return this.tasksService.countTasksByStatus();
+  @Get('get-stats')
+  async getStats(): Promise<TaskStats> {
+    return this.tasksService.getStats();
   }
 }

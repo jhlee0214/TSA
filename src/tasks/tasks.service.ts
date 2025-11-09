@@ -4,6 +4,13 @@ import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
 import { Status } from '@prisma/client';
 
+// Interface for Task Statistics
+export interface TaskStats {
+  total: number;
+  byStatus: Record<Status, number>;
+  percentCompleted: number;
+}
+
 @Injectable()
 export class TasksService {
   constructor(private readonly prisma: PrismaService) {}
@@ -49,29 +56,29 @@ export class TasksService {
     return this.prisma.task.delete({ where: { id } });
   }
 
-  // calculate the percentage of completed tasks
-  async calculateCompletionPercentage(): Promise<number> {
-    const totalTasks = await this.prisma.task.count();
-    if (totalTasks === 0) {
-      return 0;
-    }
-    const completedTasks = await this.prisma.task.count({
-      where: { status: Status.COMPLETED },
-    });
-    return (completedTasks / totalTasks) * 100;
+  // Count tasks by status to be called by TaskStats endpoint
+  async countTasksByStatus(): Promise<Record<Status, number>> {
+    const result = Object.values(Status).reduce(
+      (acc, status) => ({ ...acc, [status]: 0 }),
+      {} as Record<Status, number>,
+    );
+
+    await Promise.all(
+      Object.values(Status).map(async (status) => {
+        result[status] = await this.prisma.task.count({ where: { status } });
+      }),
+    );
+
+    return result;
   }
 
-  // Count tasks by status
-  async countTasksByStatus(): Promise<Record<Status, number>> {
-    const statuses = Object.values(Status);
-    const counts: Record<Status, number> = {} as Record<Status, number>;
+  async getStats(): Promise<TaskStats> {
+    const byStatus = await this.countTasksByStatus();
+    const total = Object.values(byStatus).reduce((sum, n) => sum + n, 0);
+    const percentCompleted = total
+      ? Number(((byStatus[Status.COMPLETED] / total) * 100).toFixed(2))
+      : 0;
 
-    for (const status of statuses) {
-      counts[status] = await this.prisma.task.count({
-        where: { status },
-      });
-    }
-
-    return counts;
+    return { total, byStatus, percentCompleted };
   }
 }
