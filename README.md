@@ -10,14 +10,6 @@ Full-stack implementation of a to-do management tool for the TSA skills assessme
 └── package.json  # (root) placeholder – each workspace manages its own deps
 ```
 
-## Tech Choices
-
-| Layer    | Stack | Why |
-|----------|-------|-----|
-| Backend  | NestJS 11, Prisma 6, SQLite | Nest provides opinionated modules/validation and integrates cleanly with Prisma. SQLite keeps setup zero-config and Prisma allows easy migration/typing. |
-| Frontend | React 19 + Vite + TypeScript | Fast dev server and modern tooling. React handles state (filters, modal forms) and lets us quickly implement TSA-branded UI. |
-| Styling  | Plain CSS with TSA brand tokens | Keeps bundle small and mirrors brand palette directly. |
-
 ## Prerequisites
 
 - Node.js ≥ 20 (LTS recommended)

@@ -70,6 +70,7 @@ const TaskList: React.FC<TaskListProps> = ({
     : 'No tasks available.';
 
   return (
+    <div className="task-table-wrapper">
     <table className="task-table">
       <thead>
         <tr>
@@ -155,6 +156,7 @@ const TaskList: React.FC<TaskListProps> = ({
         )}
       </tbody>
     </table>
+    </div>
   );
 };
 

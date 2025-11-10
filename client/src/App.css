@@ -21,6 +21,7 @@ html, body {
 #root {
   min-height: 100vh;
   align-items: center;
+  background-color: #e41072;
 }
 
 .app-shell {

@@ -14,12 +14,12 @@ datasource db {
 }
 
 model Task {
-  id Int @id @default(autoincrement())
-  title String
+  id          Int      @id @default(autoincrement())
+  title       String
   description String?
-  status Status @default(NOT_STARTED)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  status      Status   @default(NOT_STARTED)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([status])
 }
