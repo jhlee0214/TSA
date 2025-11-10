@@ -14,7 +14,7 @@ function App() {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [completedPercent, setCompletedPercent] = useState<number | null>(null);
-  const [statusFilter, setStatusFilter] = useState<Status[]>([]);
+  const [statusFilter, setStatusFilter] = useState<Status[]>(['NOT_STARTED', 'IN_PROGRESS', 'COMPLETED']);
 
   const loadTasks = async () => {
     try {
@@ -45,15 +45,6 @@ function App() {
     loadTasks();
   }, []);
 
-  if (loading) {
-    return (
-      <div className="tsa-spinner" role="status" aria-live="polite">
-        <div className="tsa-spinner__circle" />
-        <p>Loading tasks...</p>
-      </div>
-    );
-  }
-
   if (error) {
     return <div className="error">Error: {error}</div>;
   }
@@ -66,7 +57,7 @@ function App() {
   const handleUpdateSubmit = async (payload: { title: string; description?: string; status: Status }) => {
     if (!editingTask) return;
     try {
-      const response = await fetch(`http://localhost:3000/tasks/${editingTask.id}`, {
+      const response = await fetch(`${API_ENV}/${editingTask.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -103,7 +94,14 @@ function App() {
   };
 
   return (
-    <div className="app-shell">
+    <>
+      {loading && (
+        <div className="loading-overlay" role="status" aria-live="polite">
+          <div className="loading-overlay__spinner" />
+          <p>Loading tasks...</p>
+        </div>
+      )}
+      <div className="app-shell">
       <div className="titleBar" role="banner">
         <h2 className="title">Task Management for TSA</h2>
       </div>
@@ -144,6 +142,7 @@ function App() {
         </div>
       )}
     </div>
+    </>
   )
 }
 

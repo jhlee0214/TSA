@@ -177,6 +177,12 @@
   background-color: var(--row-hover);
 }
 
+.task-table__row--empty td {
+  text-align: center;
+  color: var(--muted);
+  padding: 1.25rem;
+}
+
 .task-table__td--actions {
   white-space: nowrap;
 }
@@ -227,7 +233,7 @@
   color: var(--text);
 }
 
-.task-status-filter__clear {
+.task-status-filter__reset {
   border: none;
   background: transparent;
   color: var(--muted);
@@ -236,7 +242,7 @@
   cursor: pointer;
   font-size: 0.8rem;
 }
-.task-status-filter__clear:hover {
+.task-status-filter__reset:hover {
   color: var(--primary-text);
 }
 

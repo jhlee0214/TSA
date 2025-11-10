@@ -113,22 +113,25 @@ html, body {
   z-index: 1000;
 }
 
-.tsa-spinner {
-  min-height: 100vh;
+.loading-overlay {
+  position: fixed;
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  background: var(--tsa-grey);
-  color: var(--tsa-black);
+  background: rgba(0, 0, 0, 0.35);
+  color: #fff;
+  z-index: 1500;
+  text-align: center;
 }
 
-.tsa-spinner__circle {
+.loading-overlay__spinner {
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  border: 6px solid #f7cfe1;
+  border: 6px solid rgba(255, 255, 255, 0.4);
   border-top-color: var(--tsa-pink);
   animation: spin 0.9s linear infinite;
 }

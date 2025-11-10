@@ -57,21 +57,17 @@ const TaskList: React.FC<TaskListProps> = ({
         onStatusesChange([...selectedStatuses, status]);
       }
     } else {
+      // Handle status removal
+      if (selectedStatuses.length === 1 && selectedStatuses[0] === status) {
+        return;
+      }
       onStatusesChange(selectedStatuses.filter((value) => value !== status));
     }
   };
 
-  // Render message if no tasks are available
-  if (filteredTasks.length === 0) {
-    const message = selectedStatuses.length
-      ? 'No tasks match the selected status.'
-      : 'No tasks available.';
-    return (
-      <div className="task-empty">
-        <p>{message}</p>
-      </div>
-    );
-  }
+  const emptyMessage = selectedStatuses.length
+    ? 'No tasks match the selected status.'
+    : 'No tasks available.';
 
   return (
     <table className="task-table">
@@ -109,10 +105,12 @@ const TaskList: React.FC<TaskListProps> = ({
                 ))}
                 <button
                   type="button"
-                  className="task-status-filter__clear"
-                  onClick={() => onStatusesChange([])}
+                  className="task-status-filter__reset"
+                  onClick={() =>
+                    onStatusesChange(STATUS_OPTIONS.map((option) => option.value))
+                  }
                 >
-                  Clear
+                  Reset
                 </button>
               </div>
             )}
@@ -121,32 +119,40 @@ const TaskList: React.FC<TaskListProps> = ({
         </tr>
       </thead>
       <tbody>
-        {filteredTasks.map((task) => (
-          <tr key={task.id} className="task-table__row">
-            <td className="task-table__td">{task.id}</td>
-            <td className="task-table__td">{task.title}</td>
-            <td className="task-table__td">{task.description ?? '-'}</td>
-            <td className="task-table__td">
-              <StatusBadge status={task.status ?? 'NOT_STARTED'} />
-            </td>
-            <td className="task-table__td task-table__td--actions">
-              <button
-                type="button"
-                className="task-edit-button"
-                onClick={() => onEdit(task, task.status ?? 'NOT_STARTED')}
-              >
-                Edit
-              </button>
-              <button
-                type="button"
-                className="task-delete-button task-delete-button--danger"
-                onClick={() => onDelete(task.id)}
-              >
-                Delete
-              </button>
+        {filteredTasks.length === 0 ? (
+          <tr className="task-table__row task-table__row--empty">
+            <td className="task-table__td" colSpan={5}>
+              {emptyMessage}
             </td>
           </tr>
-        ))}
+        ) : (
+          filteredTasks.map((task) => (
+            <tr key={task.id} className="task-table__row">
+              <td className="task-table__td">{task.id}</td>
+              <td className="task-table__td">{task.title}</td>
+              <td className="task-table__td">{task.description ?? '-'}</td>
+              <td className="task-table__td">
+                <StatusBadge status={task.status ?? 'NOT_STARTED'} />
+              </td>
+              <td className="task-table__td task-table__td--actions">
+                <button
+                  type="button"
+                  className="task-edit-button"
+                  onClick={() => onEdit(task, task.status ?? 'NOT_STARTED')}
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  className="task-delete-button task-delete-button--danger"
+                  onClick={() => onDelete(task.id)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>
+          ))
+        )}
       </tbody>
     </table>
   );
