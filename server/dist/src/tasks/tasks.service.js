@@ -28,31 +28,44 @@ let TasksService = class TasksService {
             orderBy: { createdAt: 'desc' },
         });
     }
-    async findOne(id) {
-        return this.prisma.task.findUnique({ where: { id } });
-    }
     async update(id, updateTaskDto) {
         common_1.Logger.log(`Updating task with id ${id}...`, 'TasksService');
-        if (!(await this.findOne(id))) {
-            throw new common_1.NotFoundException(`Task with id ${id} not found`);
+        try {
+            return await this.prisma.task.update({
+                where: { id },
+                data: updateTaskDto,
+            });
         }
-        return this.prisma.task.update({
-            where: { id },
-            data: updateTaskDto,
-        });
+        catch (error) {
+            if (error instanceof client_1.Prisma.PrismaClientKnownRequestError &&
+                error.code === 'P2025') {
+                throw new common_1.NotFoundException(`Task with id ${id} not found`);
+            }
+            throw error;
+        }
     }
     async remove(id) {
         common_1.Logger.log(`Deleting task with id ${id}...`, 'TasksService');
-        if (!(await this.findOne(id))) {
-            throw new common_1.NotFoundException(`Task with id ${id} not found`);
+        try {
+            return await this.prisma.task.delete({ where: { id } });
         }
-        return this.prisma.task.delete({ where: { id } });
+        catch (error) {
+            if (error instanceof client_1.Prisma.PrismaClientKnownRequestError &&
+                error.code === 'P2025') {
+                throw new common_1.NotFoundException(`Task with id ${id} not found`);
+            }
+            throw error;
+        }
     }
     async countTasksByStatus() {
         const result = Object.values(client_1.Status).reduce((acc, status) => ({ ...acc, [status]: 0 }), {});
-        await Promise.all(Object.values(client_1.Status).map(async (status) => {
-            result[status] = await this.prisma.task.count({ where: { status } });
-        }));
+        const grouped = await this.prisma.task.groupBy({
+            by: ['status'],
+            _count: { status: true },
+        });
+        grouped.forEach(({ status, _count }) => {
+            result[status] = _count.status;
+        });
         return result;
     }
     async getStats() {

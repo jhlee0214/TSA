@@ -2,7 +2,7 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import { Status } from '@prisma/client';
+import { Prisma, Status } from '@prisma/client';
 
 // Interface for Task Statistics
 export interface TaskStats {
@@ -27,33 +27,39 @@ export class TasksService {
     });
   }
 
-  async findOne(id: number) {
-    return this.prisma.task.findUnique({ where: { id } });
-  }
-
   async update(id: number, updateTaskDto: UpdateTaskDto) {
     Logger.log(`Updating task with id ${id}...`, 'TasksService');
 
-    // Ensure the task exists before updating
-    if (!(await this.findOne(id))) {
-      throw new NotFoundException(`Task with id ${id} not found`);
+    try {
+      return await this.prisma.task.update({
+        where: { id },
+        data: updateTaskDto,
+      });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        throw new NotFoundException(`Task with id ${id} not found`);
+      }
+      throw error;
     }
-
-    return this.prisma.task.update({
-      where: { id },
-      data: updateTaskDto,
-    });
   }
 
   async remove(id: number) {
     Logger.log(`Deleting task with id ${id}...`, 'TasksService');
 
-    // Ensure the task exists before deleting
-    if (!(await this.findOne(id))) {
-      throw new NotFoundException(`Task with id ${id} not found`);
+    try {
+      return await this.prisma.task.delete({ where: { id } });
+    } catch (error) {
+      if (
+        error instanceof Prisma.PrismaClientKnownRequestError &&
+        error.code === 'P2025'
+      ) {
+        throw new NotFoundException(`Task with id ${id} not found`);
+      }
+      throw error;
     }
-
-    return this.prisma.task.delete({ where: { id } });
   }
 
   // Count tasks by status to be called by TaskStats endpoint
@@ -63,11 +69,14 @@ export class TasksService {
       {} as Record<Status, number>,
     );
 
-    await Promise.all(
-      Object.values(Status).map(async (status) => {
-        result[status] = await this.prisma.task.count({ where: { status } });
-      }),
-    );
+    const grouped = await this.prisma.task.groupBy({
+      by: ['status'],
+      _count: { status: true },
+    });
+
+    grouped.forEach(({ status, _count }) => {
+      result[status] = _count.status;
+    });
 
     return result;
   }
