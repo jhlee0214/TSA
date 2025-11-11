@@ -196,7 +196,9 @@ Error handling
 
 Build for production  
 ```
-npm run build && npm run preview
+cd client
+npm run build
+npm run preview
 ```
 
 ## Technology choices and why they fit
